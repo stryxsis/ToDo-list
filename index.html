@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <title>To do list v1</title>
+  </head>
+  <body>
+    <div class="wall">
+      <!-- NAV HTML -->
+      <nav class="nav">
+        <div class="logo"><h1>To-Do List</h1></div>
+        <div class="switch-theme">
+          <input id="switch-dark-light" class="theme-checkbox" type="checkbox" aria-label="dark & light switch" checked />
+        </div>
+      </nav>
+
+      <main class="main">
+        <section class="section-information-addTask">
+          <div class="div-information">
+            <h2>My tasks</h2>
+            <p>You have <span id="counter-task-ToDo">0</span> task left!</p>
+          </div>
+          <div>
+            <button id="btn-open-modal" type="button" aria-label="open modal btn">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus">
+                <path d="M5 12h14" />
+                <path d="M12 5v14" />
+              </svg>
+              <span>Add Task</span>
+            </button>
+          </div>
+        </section>
+
+        <!-- MODAL HTML -->
+        <section id="modal-overley" class="modal-overley">
+          <div class="modal-container">
+            <div class="container-close-modal-btn">
+              <h2>Add Task</h2>
+              <button type="button" class="close-modal-btn" id="close-modal-btn" aria-label="close modal btn">
+                <svg xmlns="http://www.w3.org/2000/svg" stroke="red" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x">
+                  <path d="M18 6 6 18" />
+                  <path d="m6 6 12 12" />
+                </svg>
+              </button>
+            </div>
+            <form id="modulo">
+              <div class="modulo-title">
+                <label for="input-title">Title:</label>
+                <input class="input input-title" type="text" name="input-title" id="input-title" placeholder="Add task (obligatory)" aria-label="input add task" required />
+              </div>
+              <div class="modulo-description">
+                <label for="input-description">Description:</label>
+                <input class="input" type="text" name="input-description" id="input-description" placeholder="Add a description" aria-label="input add category" />
+              </div>
+              <div class="modulo-deadline">
+                <label for="input-deadline">Deadline:</label>
+                <input class="input" type="date" id="input-deadline" />
+              </div>
+              <button class="button-submit" type="submit" id="submit">Add Todo</button>
+            </form>
+          </div>
+        </section>
+
+        <!-- <div class="container-serch">
+          <select name="filter" id="select-filter">
+            <option value="all">All</option>
+          </select>
+        </div> -->
+
+        <!-- Container task -->
+        <section class="container-task">
+          <ul id="container-task">
+            <!-- <li class="task" id="prova">
+              <section class="container-check-box">
+                <div class="checkbox-wrapper-15" id="task-check">
+                  <input class="inp-cbx" id="cbx-15" type="checkbox" style="display: none" />
+                  <label class="cbx" for="cbx-15">
+                    <span>
+                      <svg width="12px" height="9px" viewbox="0 0 12 9">
+                        <polyline points="1 5 4 8 11 1"></polyline>
+                      </svg>
+                    </span>
+                  </label>
+                </div>
+              </section>
+              <section class="container-task">
+                <div class="container-ToDo">
+                  <h3>Tutto apposto</h3>
+                </div>
+                <div class="main-task">
+                  <div class="container-description">
+                    <p>Questa e una bella descrizione</p>
+                  </div>
+                  <div class="container-date">
+                    <span>Due 15 july 2025</span>
+                  </div>
+                </div>
+              </section>
+              <section class="container-btn-ico">
+                <button onclick="editTask(this)" class="btn-ico" type="button" aria-label="edit task button">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pencil">
+                    <path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z" />
+                    <path d="m15 5 4 4" />
+                  </svg>
+                </button>
+                <button onclick="removeTask(this)" class="btn-ico" type="button" aria-label="delet task button">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash">
+                    <path d="M3 6h18" />
+                    <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
+                    <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
+                  </svg>
+                </button>
+              </section>
+            </li> -->
+          </ul>
+        </section>
+      </main>
+    </div>
+  </body>
+  <script src="script.js"></script>
+</html>
