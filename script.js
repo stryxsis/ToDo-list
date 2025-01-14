@@ -1,15 +1,136 @@
-/**
- * TODO:
- *  - Implementare i task:
- *    - Creare un oggetto dove ci saranno tutti i task, poi mi creo un altra variabile dove mi modifico il task in quel momento
- *  - implementare le categorie dinamiche
- */
+class Task {
+  constructor(id, toDO, description, date, isComplited) {
+    this._id = id;
+    this._toDO = toDO;
+    this._description = description;
+    this._date = date;
+    this._isComplited = isComplited;
+  }
+
+  get editTask() {
+    this._toDO, this._description, this._date;
+  }
+
+  set toDO(toDO) {
+    this._toDO = toDO;
+  }
+
+  set description(description) {
+    this._description = description;
+  }
+
+  set date(date) {
+    this._date = date;
+  }
+
+  isComplited() {
+    this._isComplited = !this._isComplited;
+  }
+
+  renderingHTML() {
+    return `
+    <li id="${this._id}" class="task ${this._isComplited ? "task-complited" : ""}">
+      <section class="container-check-box">
+        <div class="checkbox-wrapper-15">
+          <input onclick="checkTask(this)" class="inp-cbx" id="cbx-${this._id}" type="checkbox" style="display: none" ${this._isComplited ? "checked" : ""}/>
+          <label class="cbx" for="cbx-${this._id}">
+            <span>
+              <svg width="12px" height="9px" viewbox="0 0 12 9">
+                <polyline points="1 5 4 8 11 1"></polyline>
+              </svg>
+            </span>
+          </label>
+        </div>
+      </section>
+      <section class="container-task">
+        <div class="container-ToDo">
+          <h3>${this._toDO}</h3>
+        </div>
+        ${
+          this._description || this._date
+            ? `
+            <div class="main-task">
+              ${
+                this._description
+                  ? `
+                  <div class="container-description">
+                    <p>${this._description}</p>
+                  </div>
+                  `
+                  : ""
+              }
+              ${
+                this._date
+                  ? `
+                  <div class="container-date">
+                    <span>${this._date}</span>
+                  </div>
+                  `
+                  : ""
+              }
+            </div>
+          `
+            : ""
+        }
+      </section>
+      <section class="container-btn-ico">
+      <button class="btn-ico" type="button" onclick="editTask(this)" aria-label="edit task button">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pencil">
+          <path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z" />
+          <path d="m15 5 4 4" />
+        </svg>
+      </button>
+      <button class="btn-ico" type="button" onclick="removeTask(this)" aria-label="delet task button">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash">
+          <path d="M3 6h18" />
+          <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
+          <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
+        </svg>
+      </button>
+    </section>
+    </li>
+    `;
+  }
+}
+
+class TaskList {
+  constructor(id, toDO, descriptionList, date, isComplited) {
+    this._id = id;
+    this._toDO = toDO;
+    this._descriptionList = descriptionList;
+    this._date = date;
+    this._isComplited = isComplited;
+  }
+
+  get editTask() {
+    return this._toDO, this._descriptionList, this._date;
+  }
+
+  set toDO(toDO) {
+    this._toDO = toDO;
+  }
+
+  set description(descriptionList) {
+    this._description = descriptionList;
+  }
+
+  set date(date) {
+    this._date = date;
+  }
+
+  isComplited() {
+    this._isComplited = !this._isComplited;
+  }
+}
+
 const btnOppenModal = document.getElementById("btn-open-modal");
 const btnCloseModal = document.getElementById("close-modal-btn");
 const btnModalSubmit = document.getElementById("submit");
+const btnDescriptionList = document.getElementById("dectiption-list");
 const switchDarkLight = document.getElementById("switch-dark-light");
 const taskModal = document.getElementById("modal-overley");
 const modulo = document.getElementById("modulo");
+const titleModal = document.getElementById("title-modal");
 const inputTask = document.getElementById("input-title");
 const inputDescription = document.getElementById("input-description");
 const inputTitle = document.getElementById("input-title");
@@ -20,7 +141,7 @@ let allTask = [];
 let currentTask = {
   id: null,
   toDO: "",
-  description: undefined,
+  description: "",
   date: "",
   isComplited: false,
 };
@@ -52,6 +173,16 @@ btnCloseModal.addEventListener("click", () => {
   resetModalInput();
 });
 
+btnDescriptionList.addEventListener("click", (e) => {
+  if (e.currentTarget.checked) {
+    titleModal.textContent = "Add Task List";
+    inputDescription.placeholder = "Write a list es: Bread, Milk, Apple, ...";
+  } else {
+    titleModal.textContent = "Add Task";
+    inputDescription.placeholder = "Add a description";
+  }
+});
+
 modulo.addEventListener("submit", (e) => {
   e.preventDefault();
 
@@ -59,17 +190,30 @@ modulo.addEventListener("submit", (e) => {
 });
 
 // Takes the values ​​of the inputs
-const pickTask = () => {
-  currentTask.toDO = inputTask.value.trim();
-  currentTask.description = inputDescription.value.trim();
-  currentTask.date = inputDeadline.value;
+// const pickTask = () => {
+//   currentTask.toDO = inputTask.value.trim();
+//   currentTask.description = inputDescription.value.trim();
+//   currentTask.date = inputDeadline.value;
 
-  if (btnModalSubmit.textContent === "Edit task") {
-    const taskEditIndex = allTask.findIndex((item) => item.id === currentTask.id);
-    allTask[taskEditIndex] = { ...currentTask };
+//   if (btnModalSubmit.textContent === "Edit task") {
+//     const taskEditIndex = allTask.findIndex((item) => item.id === currentTask.id);
+//     allTask[taskEditIndex] = { ...currentTask };
+//   } else {
+//     currentTask.id = `${Date.now()}`;
+//     allTask.unshift({ ...currentTask });
+//   }
+
+//   resetModalInput();
+//   tasksDisplay();
+// };
+
+const pickTask = () => {
+  if (btnDescriptionList.checked) {
+    //TODO: Implementare il taskList
+    null;
   } else {
-    currentTask.id = `${Date.now()}`;
-    allTask.unshift({ ...currentTask });
+    const newTask = new Task(`${Date.now()}`, inputTask.value.trim(), inputDescription.value.trim() || "", inputDeadline.value || "", false);
+    allTask.unshift(newTask);
   }
 
   resetModalInput();
@@ -92,72 +236,7 @@ const resetModalInput = () => {
 
 const tasksDisplay = () => {
   containerTask.innerHTML = "";
-  containerTask.innerHTML += allTask
-    .map(({ id, toDO, description, date, isComplited }) => {
-      return `
-    <li id="${id}" class="task ${isComplited ? "task-complited" : ""}">
-      <section class="container-check-box">
-        <div class="checkbox-wrapper-15">
-          <input onclick="checkTask(this)" class="inp-cbx" id="cbx-${id}" type="checkbox" style="display: none" ${isComplited ? "checked" : ""}/>
-          <label class="cbx" for="cbx-${id}">
-            <span>
-              <svg width="12px" height="9px" viewbox="0 0 12 9">
-                <polyline points="1 5 4 8 11 1"></polyline>
-              </svg>
-            </span>
-          </label>
-        </div>
-      </section>
-      <section class="container-task">
-        <div class="container-ToDo">
-          <h3>${toDO}</h3>
-        </div>
-        ${
-          description || date
-            ? `
-            <div class="main-task">
-              ${
-                description
-                  ? `
-                  <div class="container-description">
-                    <p>${description}</p>
-                  </div>
-                  `
-                  : ""
-              }
-              ${
-                date
-                  ? `
-                  <div class="container-date">
-                    <span>${date}</span>
-                  </div>
-                  `
-                  : ""
-              }
-            </div>
-          `
-            : ""
-        }
-      </section>
-      <section class="container-btn-ico">
-      <button class="btn-ico" type="button" onclick="editTask(this)" aria-label="edit task button">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pencil">
-          <path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z" />
-          <path d="m15 5 4 4" />
-        </svg>
-      </button>
-      <button class="btn-ico" type="button" onclick="removeTask(this)" aria-label="delet task button">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash">
-          <path d="M3 6h18" />
-          <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
-          <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
-        </svg>
-      </button>
-    </section>
-    </li>
-    `;
-    })
-    .join("");
+  containerTask.innerHTML = allTask.map((task) => task.renderingHTML()).join("");
   countTaskToDo();
   saveLocalData();
 };
