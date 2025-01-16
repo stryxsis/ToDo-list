@@ -34,7 +34,7 @@
         </section>
 
         <!-- MODAL HTML -->
-        <section id="modal-overley" class="modal-overley modal-overley-view">
+        <section id="modal-overley" class="modal-overley">
           <div class="modal-container">
             <div class="container-close-modal-btn">
               <h2 id="title-modal">Add Task</h2>
@@ -69,7 +69,7 @@
                 <label class="input-label" for="input-deadline">Deadline:</label>
                 <input class="input" type="date" id="input-deadline" />
               </div>
-              <button class="button-submit" type="submit" id="submit">Add Todo</button>
+              <button class="button-submit" type="submit" id="submit" data-action="add">Add Todo</button>
             </form>
           </div>
         </section>
@@ -82,7 +82,117 @@
 
         <!-- Container task -->
         <section class="container-task">
-          <ul id="container-task"></ul>
+          <ul id="container-task">
+            <!--<li id="1736954499471" class="task task-complited">
+              <section class="container-check-box">
+                <div class="checkbox-wrapper-15">
+                  <input onclick="checkTask(this)" class="inp-cbx" id="cbx-1736954499471" type="checkbox" style="display: none" />
+                  <label class="cbx" for="cbx-1736954499471">
+                    <span>
+                      <svg width="12px" height="9px" viewBox="0 0 12 9">
+                        <polyline points="1 5 4 8 11 1"></polyline>
+                      </svg>
+                    </span>
+                  </label>
+                </div>
+              </section>
+              <section class="container-task">
+                <div class="container-ToDo">
+                  <h3>Fare la spesa</h3>
+                </div>
+
+                <div class="main-task">
+                  <div class="container-description">
+                    <ul>
+                      <li>
+                        <div class="checkbox-wrapper-4">
+                          <input class="inp-cbx" id="Uova" type="checkbox" />
+                          <label class="cbx" for="Uova">
+                            <span>
+                              <svg width="12px" height="10px"></svg>
+                            </span>
+                            <span class="task-list-comlited">Uova</span>
+                          </label>
+                          <svg class="inline-svg">
+                            <symbol id="check-4" viewBox="0 0 12 10">
+                              <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
+                            </symbol>
+                          </svg>
+                        </div>
+                      </li>
+                      <li>
+                        <div class="checkbox-wrapper-4">
+                          <input class="inp-cbx" id="Pane" type="checkbox" />
+                          <label class="cbx" for="Pane">
+                            <span>
+                              <svg width="12px" height="10px"></svg>
+                            </span>
+                            <span class="task-list-comlited">Pane</span>
+                          </label>
+                          <svg class="inline-svg">
+                            <symbol id="check-4" viewBox="0 0 12 10">
+                              <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
+                            </symbol>
+                          </svg>
+                        </div>
+                      </li>
+                      <li>
+                        <div class="checkbox-wrapper-4">
+                          <input class="inp-cbx" id="Miele" type="checkbox" />
+                          <label class="cbx" for="Miele">
+                            <span>
+                              <svg width="12px" height="10px"></svg>
+                            </span>
+                            <span class="task-list-comlited">Miele</span>
+                          </label>
+                          <svg class="inline-svg">
+                            <symbol id="check-4" viewBox="0 0 12 10">
+                              <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
+                            </symbol>
+                          </svg>
+                        </div>
+                      </li>
+                      <li>
+                        <div class="checkbox-wrapper-4">
+                          <input class="inp-cbx" id="Sacchetti" type="checkbox" />
+                          <label class="cbx" for="Sacchetti">
+                            <span>
+                              <svg width="12px" height="10px"></svg>
+                            </span>
+                            <span class="task-list-comlited">Sacchetti per il cane</span>
+                          </label>
+                          <svg class="inline-svg">
+                            <symbol id="check-4" viewBox="0 0 12 10">
+                              <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
+                            </symbol>
+                          </svg>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+
+                  <div class="container-date">
+                    <span>0202-02-02</span>
+                  </div>
+                </div>
+              </section>
+              <section class="container-btn-ico">
+                <button class="btn-ico" type="button" onclick="editTask(this)" aria-label="edit task button">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pencil">
+                    <path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"></path>
+                    <path d="m15 5 4 4"></path>
+                  </svg>
+                </button>
+                <button class="btn-ico" type="button" onclick="removeTask(this)" aria-label="delet task button">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash">
+                    <path d="M3 6h18"></path>
+                    <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
+                    <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
+                  </svg>
+                </button>
+              </section>
+            </li>-->
+          </ul>
         </section>
       </main>
     </div>
