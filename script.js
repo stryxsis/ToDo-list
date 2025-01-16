@@ -48,6 +48,10 @@ class Task {
     this._date = date;
   }
 
+  set isComplited(isComplited) {
+    this._isComplited = isComplited;
+  }
+
   changeIsComplited() {
     this._isComplited = !this._isComplited;
   }
@@ -168,8 +172,8 @@ class TaskList {
     this._date = date;
   }
 
-  set isCompleted(isCompleted) {
-    this._isComplited = isCompleted;
+  set isComplited(isComplited) {
+    this._isComplited = isComplited;
   }
 
   changeIsComplited() {
@@ -300,7 +304,7 @@ document.addEventListener("DOMContentLoaded", () => {
     switchDarkLight.checked = savedTheme === "dark";
   }
 
-  allTask = loadTaskFromLocalStorage() || [];
+  allTask = loadTaskFromLocalStorage();
   if (allTask) tasksDisplay();
 });
 
@@ -358,11 +362,11 @@ const updateTask = (task, updates) => {
   task.date = updates.date;
 };
 
-const createTaskObject = (type, id, toDO, description, descriptionList, date, isCompleted) => {
+const createTaskObject = (type, id, toDO, description, descriptionList, date, isComplited) => {
   if (type === "taskList") {
-    return new TaskList(type, id, toDO, descriptionList, date, isCompleted);
+    return new TaskList(type, id, toDO, descriptionList, date, isComplited);
   } else {
-    return new Task(type, id, toDO, description, date, isCompleted);
+    return new Task(type, id, toDO, description, date, isComplited);
   }
 };
 
@@ -442,52 +446,105 @@ const editTask = (task) => {
   taskModal.classList.toggle("modal-overley-view");
 };
 
-const checkTask = (task) => {
-  const id = task.parentElement.parentElement.parentElement.id;
-  const checkTaskIndex = allTask.findIndex((item) => item.id === task.parentElement.parentElement.parentElement.id);
-  // const checkTask = allTask.find((item) => item.id === task.parentElement.parentElement.parentElement.id);
-  allTask[checkTaskIndex].changeIsComplited();
+const updateTaskState = (taskId, isComplited) => {
+  const taskIndex = allTask.findIndex((item) => item.id === taskId);
+  allTask[taskIndex].isComplited = isComplited;
+};
 
-  allTask[checkTaskIndex].descriptionList.forEach((item, index) => {
-    allTask[checkTaskIndex].changeTaskIsComplitedAllTrue(index);
+const updateDOMForTask = (taskElement, isComplited) => {
+  taskElement.classList.toggle("task-complited", isComplited);
+  // Aggiorna checkbox o altre classi qui
+};
+
+const findTaskById = (id) => allTask.findIndex((task) => task.id === id);
+
+const findSubTaskById = (task, subTaskId) => task.descriptionList.findIndex((item) => item.id === subTaskId);
+
+const checkTask = (task) => {
+  const taskElement = task.closest(".task");
+  if (allTask[findTaskById(taskElement.id)].typeOfTask === "task") {
+    updateTaskState(taskElement.id, !allTask[findTaskById(taskElement.id)].isComplited);
+    updateDOMForTask(taskElement, allTask[findTaskById(taskElement.id)].isComplited);
+    return;
+  }
+  const subTask = document.querySelector(`#descriptionList-${taskElement.id}`);
+  Array.from(subTask.children).forEach((child) => {
+    checkListTask(child.children[0]);
   });
-  children = document.querySelectorAll(`#descriptionList-${id} > div`);
-  children.forEach((item) => {
-    item.children[0].checked = true;
-    item.children[1].children[1].classList.add("task-list-comlited");
-  });
-  task.parentElement.parentElement.parentElement.classList.toggle("task-complited");
-  countTaskToDo();
-  saveLocalData();
 };
 
 const checkListTask = (task) => {
-  const taskIndex = allTask.findIndex((item) => item.id === task.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.id);
-  const checkListTaskIndex = allTask[taskIndex].descriptionList.findIndex((item) => item.id === task.id);
-  const pederCheckbox = document.querySelector(`#cbx-${allTask[taskIndex].id}`);
-  allTask[taskIndex].changeTaskIsComplited(checkListTaskIndex);
-  task.nextElementSibling.children[1].classList.toggle("task-list-comlited");
-  let counterTrue = 0;
-  allTask[taskIndex].descriptionList.forEach((item) => {
-    if (item.isComplited) {
-      counterTrue++;
-    }
-    if (counterTrue === allTask[taskIndex].descriptionList.length) {
-      checkTask(pederCheckbox);
-      pederCheckbox.checked = true;
-    } else {
-      pederCheckbox.checked = false;
-      allTask[taskIndex].isCompleted = false;
-      document.getElementById(`${allTask[taskIndex].id}`).classList.remove("task-complited");
+  const taskElement = task.closest(".task");
+  const taskIndex = findTaskById(taskElement.id);
+  const subTaskIndex = findSubTaskById(allTask[taskIndex], task.id);
+  const parentCheckbox = document.querySelector(`#cbx-${allTask[taskIndex].id}`);
 
-      if (allTask[taskIndex].isComplited) {
-        checkTask(pederCheckbox);
-      }
-    }
-  });
-  countTaskToDo();
-  saveLocalData();
+  allTask[taskIndex].changeTaskIsComplited(subTaskIndex);
+
+  task.nextElementSibling.children[1].classList.toggle("task-list-comlited");
+
+  if (task.nextElementSibling.children[1].classList.contains("task-list-comlited")) {
+    task.checked = true;
+  }
+
+  const allCompleted = allTask[taskIndex].descriptionList.every((subTask) => subTask.isComplited);
+  parentCheckbox.checked = allCompleted;
+
+  if (allCompleted) {
+    updateTaskState(taskElement.id, true);
+    updateDOMForTask(taskElement, true);
+  } else {
+    updateTaskState(taskElement.id, false);
+    updateDOMForTask(taskElement, false);
+  }
 };
+
+// const checkTask = (task) => {
+//   const id = task.parentElement.parentElement.parentElement.id;
+//   const checkTaskIndex = allTask.findIndex((item) => item.id === task.parentElement.parentElement.parentElement.id);
+//   // const checkTask = allTask.find((item) => item.id === task.parentElement.parentElement.parentElement.id);
+//   allTask[checkTaskIndex].changeIsComplited();
+
+//   allTask[checkTaskIndex].descriptionList.forEach((item, index) => {
+//     allTask[checkTaskIndex].changeTaskIsComplitedAllTrue(index);
+//   });
+//   children = document.querySelectorAll(`#descriptionList-${id} > div`);
+//   children.forEach((item) => {
+//     item.children[0].checked = true;
+//     item.children[1].children[1].classList.add("task-list-comlited");
+//   });
+//   task.parentElement.parentElement.parentElement.classList.toggle("task-complited");
+//   countTaskToDo();
+//   saveLocalData();
+// };
+
+// const checkListTask = (task) => {
+//   const taskIndex = allTask.findIndex((item) => item.id === task.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.id);
+//   const checkListTaskIndex = allTask[taskIndex].descriptionList.findIndex((item) => item.id === task.id);
+//   const pederCheckbox = document.querySelector(`#cbx-${allTask[taskIndex].id}`);
+//   allTask[taskIndex].changeTaskIsComplited(checkListTaskIndex);
+//   task.nextElementSibling.children[1].classList.toggle("task-list-comlited");
+//   let counterTrue = 0;
+//   allTask[taskIndex].descriptionList.forEach((item) => {
+//     if (item.isComplited) {
+//       counterTrue++;
+//     }
+//     if (counterTrue === allTask[taskIndex].descriptionList.length) {
+//       checkTask(pederCheckbox);
+//       pederCheckbox.checked = true;
+//     } else {
+//       pederCheckbox.checked = false;
+//       allTask[taskIndex].isComplited = false;
+//       document.getElementById(`${allTask[taskIndex].id}`).classList.remove("task-complited");
+
+//       if (allTask[taskIndex].isComplited) {
+//         checkTask(pederCheckbox);
+//       }
+//     }
+//   });
+//   countTaskToDo();
+//   saveLocalData();
+// };
 
 const countTaskToDo = () => {
   let counter = 0;
@@ -499,7 +556,7 @@ const countTaskToDo = () => {
 
 const loadTaskFromLocalStorage = () => {
   const tasks = JSON.parse(localStorage.getItem("allTask")) || [];
-  tasks
+  const restoredTask = tasks
     .map((task) => {
       switch (task._typeOfTask) {
         case "task":
@@ -512,6 +569,7 @@ const loadTaskFromLocalStorage = () => {
       }
     })
     .filter(Boolean);
+  return restoredTask;
 };
 
 const saveLocalData = () => {
