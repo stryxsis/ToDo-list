@@ -180,12 +180,8 @@ class TaskList {
     this._isComplited = !this._isComplited;
   }
 
-  changeTaskIsComplited(indexTask) {
-    this._descriptionList[indexTask].isComplited = !this._descriptionList[indexTask].isComplited;
-  }
-
-  changeTaskIsComplitedAllTrue(indexTask) {
-    this._descriptionList[indexTask].isComplited = true;
+  changeTaskIsComplited(indexTask, value) {
+    this._descriptionList[indexTask].isComplited = value;
   }
 
   renderingDescriptionList() {
@@ -469,6 +465,7 @@ const checkTask = (task) => {
   }
   const subTask = document.querySelector(`#descriptionList-${taskElement.id}`);
   Array.from(subTask.children).forEach((child) => {
+    child.children[0].checked = true;
     checkListTask(child.children[0]);
   });
 };
@@ -479,9 +476,17 @@ const checkListTask = (task) => {
   const subTaskIndex = findSubTaskById(allTask[taskIndex], task.id);
   const parentCheckbox = document.querySelector(`#cbx-${allTask[taskIndex].id}`);
 
-  allTask[taskIndex].changeTaskIsComplited(subTaskIndex);
+  if (task.checked) {
+    allTask[taskIndex].changeTaskIsComplited(subTaskIndex, true);
+  } else {
+    allTask[taskIndex].changeTaskIsComplited(subTaskIndex, false);
+  }
 
-  task.nextElementSibling.children[1].classList.toggle("task-list-comlited");
+  if (task.checked) {
+    task.nextElementSibling.children[1].classList.add("task-list-comlited");
+  } else {
+    task.nextElementSibling.children[1].classList.remove("task-list-comlited");
+  }
 
   if (task.nextElementSibling.children[1].classList.contains("task-list-comlited")) {
     task.checked = true;
@@ -498,53 +503,6 @@ const checkListTask = (task) => {
     updateDOMForTask(taskElement, false);
   }
 };
-
-// const checkTask = (task) => {
-//   const id = task.parentElement.parentElement.parentElement.id;
-//   const checkTaskIndex = allTask.findIndex((item) => item.id === task.parentElement.parentElement.parentElement.id);
-//   // const checkTask = allTask.find((item) => item.id === task.parentElement.parentElement.parentElement.id);
-//   allTask[checkTaskIndex].changeIsComplited();
-
-//   allTask[checkTaskIndex].descriptionList.forEach((item, index) => {
-//     allTask[checkTaskIndex].changeTaskIsComplitedAllTrue(index);
-//   });
-//   children = document.querySelectorAll(`#descriptionList-${id} > div`);
-//   children.forEach((item) => {
-//     item.children[0].checked = true;
-//     item.children[1].children[1].classList.add("task-list-comlited");
-//   });
-//   task.parentElement.parentElement.parentElement.classList.toggle("task-complited");
-//   countTaskToDo();
-//   saveLocalData();
-// };
-
-// const checkListTask = (task) => {
-//   const taskIndex = allTask.findIndex((item) => item.id === task.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.id);
-//   const checkListTaskIndex = allTask[taskIndex].descriptionList.findIndex((item) => item.id === task.id);
-//   const pederCheckbox = document.querySelector(`#cbx-${allTask[taskIndex].id}`);
-//   allTask[taskIndex].changeTaskIsComplited(checkListTaskIndex);
-//   task.nextElementSibling.children[1].classList.toggle("task-list-comlited");
-//   let counterTrue = 0;
-//   allTask[taskIndex].descriptionList.forEach((item) => {
-//     if (item.isComplited) {
-//       counterTrue++;
-//     }
-//     if (counterTrue === allTask[taskIndex].descriptionList.length) {
-//       checkTask(pederCheckbox);
-//       pederCheckbox.checked = true;
-//     } else {
-//       pederCheckbox.checked = false;
-//       allTask[taskIndex].isComplited = false;
-//       document.getElementById(`${allTask[taskIndex].id}`).classList.remove("task-complited");
-
-//       if (allTask[taskIndex].isComplited) {
-//         checkTask(pederCheckbox);
-//       }
-//     }
-//   });
-//   countTaskToDo();
-//   saveLocalData();
-// };
 
 const countTaskToDo = () => {
   let counter = 0;
