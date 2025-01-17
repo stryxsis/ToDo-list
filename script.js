@@ -462,6 +462,7 @@ const checkTask = (task) => {
     updateTaskState(taskElement.id, !allTask[findTaskById(taskElement.id)].isComplited);
     updateDOMForTask(taskElement, allTask[findTaskById(taskElement.id)].isComplited);
     countTaskToDo();
+    saveLocalData();
     return;
   }
   const subTask = document.querySelector(`#descriptionList-${taskElement.id}`);
@@ -469,7 +470,6 @@ const checkTask = (task) => {
     child.children[0].checked = true;
     checkListTask(child.children[0]);
   });
-  countTaskToDo();
 };
 
 const checkListTask = (task) => {
@@ -505,6 +505,7 @@ const checkListTask = (task) => {
     updateDOMForTask(taskElement, false);
   }
   countTaskToDo();
+  saveLocalData();
 };
 
 const countTaskToDo = () => {
