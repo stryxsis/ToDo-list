@@ -461,6 +461,7 @@ const checkTask = (task) => {
   if (allTask[findTaskById(taskElement.id)].typeOfTask === "task") {
     updateTaskState(taskElement.id, !allTask[findTaskById(taskElement.id)].isComplited);
     updateDOMForTask(taskElement, allTask[findTaskById(taskElement.id)].isComplited);
+    countTaskToDo();
     return;
   }
   const subTask = document.querySelector(`#descriptionList-${taskElement.id}`);
@@ -468,6 +469,7 @@ const checkTask = (task) => {
     child.children[0].checked = true;
     checkListTask(child.children[0]);
   });
+  countTaskToDo();
 };
 
 const checkListTask = (task) => {
@@ -502,6 +504,7 @@ const checkListTask = (task) => {
     updateTaskState(taskElement.id, false);
     updateDOMForTask(taskElement, false);
   }
+  countTaskToDo();
 };
 
 const countTaskToDo = () => {
