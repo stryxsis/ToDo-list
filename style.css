@@ -610,6 +610,10 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   user-select: none;
 }
 
+.container-description{
+  text-transform: capitalize;
+}
+
 @media screen and (max-width: 640px) {
   .checkbox-wrapper-4 .cbx {
     width: 100%;

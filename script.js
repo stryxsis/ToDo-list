@@ -58,11 +58,11 @@ class Task {
 
   renderingHTML() {
     return `
-    <li id="${this._id}" class="task ${this._isComplited ? "task-complited" : ""}">
+    <label id="${this._id}" class="task ${this._isComplited ? "task-complited" : ""}">
       <section class="container-check-box">
         <div class="checkbox-wrapper-15">
-          <input onclick="checkTask(this)" class="inp-cbx" id="cbx-${this._id}" type="checkbox" style="display: none" ${this._isComplited ? "checked" : ""}/>
-          <label class="cbx" for="cbx-${this._id}">
+          <input onclick="checkTask(this)" class="inp-cbx" id="${this._id}" type="checkbox" style="display: none" ${this._isComplited ? "checked" : ""}/>
+          <label class="cbx" for="${this._id}">
             <span>
               <svg width="12px" height="9px" viewbox="0 0 12 9">
                 <polyline points="1 5 4 8 11 1"></polyline>
@@ -117,7 +117,7 @@ class Task {
         </svg>
       </button>
     </section>
-    </li>
+    </label>
     `;
   }
 }
